@@ -1,0 +1,36 @@
+# CODEOWNERS file - specifies code ownership for pull request assignments
+
+# Default owners
+* @Yacine-ai-tech
+
+# Core modules
+/src/chatbot/ @Yacine-ai-tech
+/src/intent/ @Yacine-ai-tech
+/src/entity/ @Yacine-ai-tech
+/src/rag/ @Yacine-ai-tech
+/src/speech/ @Yacine-ai-tech
+/src/llm/ @Yacine-ai-tech
+/src/translation/ @Yacine-ai-tech
+
+# Configuration & Utils
+/src/config/ @Yacine-ai-tech
+/src/utils/ @Yacine-ai-tech
+/src/preprocessing/ @Yacine-ai-tech
+
+# API
+/api/ @Yacine-ai-tech
+
+# Tests
+/tests/ @Yacine-ai-tech
+
+# Documentation
+/*.md @Yacine-ai-tech
+/docs/ @Yacine-ai-tech
+
+# Configuration files
+/setup.py @Yacine-ai-tech
+/pyproject.toml @Yacine-ai-tech
+/requirements.txt @Yacine-ai-tech
+/.env.example @Yacine-ai-tech
+/Dockerfile @Yacine-ai-tech
+/docker-compose.yml @Yacine-ai-tech

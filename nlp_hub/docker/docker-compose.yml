@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  nlp-hub-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: nlp-hub-api
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - LOG_LEVEL=INFO
+      - DEBUG=false
+      - LLM_PROVIDER=openai
+      - LLM_API_KEY=${LLM_API_KEY}
+      - USE_GPU=false
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./models:/app/models
+    networks:
+      - nlp-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: PostgreSQL for persistent storage
+  postgres:
+    image: postgres:15-alpine
+    container_name: nlp-hub-postgres
+    environment:
+      - POSTGRES_USER=nlp_hub
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-password}
+      - POSTGRES_DB=nlp_hub
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - nlp-network
+    ports:
+      - "5432:5432"
+
+  # Optional: pgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: nlp-hub-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@nlphub.com
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-admin}
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - nlp-network
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  nlp-network:
+    driver: bridge
